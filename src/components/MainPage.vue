@@ -30,43 +30,101 @@ export default {
     CardViewComplete,
   },
   setup() {
-    let settings = {
-      rarity: [1, 2, 3],
-      school: ["Millennium", "Abydos"],
-      role: ["Attacker", "Healer"],
-      position: ["Middle", "Back"],
-      attack_type: ["Explosive", "Mystic"],
-      armor_type: ["Heavy", "Light"],
-      combat_class: ["Striker", "Special"],
-      weapon_type: ["AR", "HG"],
-      use_cover: [true, false],
-      urban: ["A", "B", "C", "D", "E"],
-      outdoors: ["A", "B", "C", "D", "E"],
-      indoors: ["A", "B", "C", "D", "E"],
-    };
-    let myStudentList = [];
-    function changeElements(params) {
-      myStudentList = [];
-      const myStudents = students;
-      myStudents.forEach((stdn, index) => {
-        const student = Object.values(stdn);
-        let isTrue = 0
-        params.forEach(param => {
-          if (student.includes(param)) {
-            isTrue += 1;
+    class StudentList {
+      #allFilters = {
+        rarity: [1, 2, 3],
+        school: ["Millennium", "Abydos"],
+        role: ["Attacker", "Healer"],
+        position: ["Middle", "Back"],
+        attack_type: ["Explosive", "Mystic"],
+        armor_type: ["Heavy", "Light"],
+        combat_class: ["Striker", "Special"],
+        weapon_type: ["AR", "HG"],
+        use_cover: [true, false],
+        urban: ["A", "B", "C", "D", "E"],
+        outdoors: ["A", "B", "C", "D", "E"],
+        indoors: ["A", "B", "C", "D", "E"],
+      };
+      constructor(students, rarity, school, role, position, attack_type, armor_type, combat_class, weapon_type, use_cover, urban, outdoors, indoors) {
+        this.students = students;
+        this.rarity = rarity;
+        this.school = school;
+        this.role = role;
+        this.position = position;
+        this.attack_type = attack_type;
+        this.armor_type = armor_type;
+        this.combat_class = combat_class;
+        this.weapon_type = weapon_type;
+        this.use_cover = use_cover;
+        this.urban = urban;
+        this.outdoors = outdoors;
+        this.indoors = indoors;
+        this.tosearch = [
+          "rarity","school","role","position","attack_type",
+          "armor_type","combat_class","weapon_type","use_cover",
+          "urban","outdoors","indoors",
+        ];
+      }
+
+      get myStudentList() {
+        const fields = this.thereFields();
+        let tags = [];
+        if (fields.length > 0) {
+          tags = this.isNewGroup();
+        }
+        else {
+          return false;
+        }
+        if (tags) {
+          return this.searchStudents(tags);
+        }
+        return [0];
+      }
+
+      thereFields() {
+        this.tosearch = this.tosearch.filter(key => Array.isArray(this[key]));
+        return this.tosearch;
+      }
+
+      isNewGroup() {
+        const tags = [];
+        this.tosearch.forEach(keys => {
+          if (this[keys].length !== this.#allFilters[keys].length) {
+            tags.push(this[keys]);
           }
         });
-        if (isTrue === params.length) {
-          myStudentList.push(students[index])
+        console.info(tags)
+        if (tags.length === 0) {
+          return false;
+        } else {
+          return tags;
         }
-      });
-    }
-    function filterStudent(student) {
-      const info = Object.values(student);
+      }
 
+      searchStudents(studentTags) {
+        const studentIds = [];
+        this.students.forEach((student, index) => {
+          let isInGroup = 0;
+          studentTags.forEach((tags, i) => {
+            tags.forEach(tag => {
+              if (student[this.tosearch[i]] === tag) {
+                  isInGroup += 1;
+              }
+            })
+          });
+          if (isInGroup === studentTags.length) {
+            studentIds.push(index)
+          }
+        });
+        return studentIds;
+      }
     }
+
+    const studentGroup = new StudentList(students, [1]) // Esto debe ser una función, eliminar esto
+
     return {
       students,
+      studentGroup
     }
   }
 }
