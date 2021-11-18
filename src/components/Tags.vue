@@ -9,7 +9,7 @@ export default {
       type: String,
       default: "green"
     },
-    text: String,
+    text: [String, Boolean],
     plus: {
       type: String,
       required: false,

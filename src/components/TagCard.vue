@@ -14,7 +14,7 @@ export default {
   },
   props: {
     title: String,
-    content: String,
+    content: [String, Boolean],
     color: String,
   }
 }

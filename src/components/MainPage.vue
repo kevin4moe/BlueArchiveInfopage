@@ -1,19 +1,27 @@
 <template>
   <main class="flex flex-col bg-blue-100">
-    <section class="flex justify-center mt-2 mx-2 rounded bg-white shadow">
+    <section class="flex justify-center flex-wrap mt-2 mx-2 rounded bg-white shadow">
       <select 
-        name="combat_class"
-        id=""
+        v-for="(filter, name) in allFilters"
+        :name="name"
+        :key="name"
       >
-        <option value="Striker">Striker</option>
-        <option value="Special">Special</option>
+        <option
+          v-for="(item, index) in filter"
+          :value="item"
+          @click="studentGroup.addTags(name, item)"
+          :key="index"
+        >
+          {{ item }}
+        </option>
       </select>
+      <button @click="newStudentsGroup">Search</button>
     </section>
     <section class="flex flex-wrap">
       <div 
-        v-for="(student, n) in students"
+        v-for="student in newStudents"
         class="w-full sm:w-1/2 lg:w-1/3"
-        :key="n"
+        :key="student.name"
       >
         <card-view-complete :student="student" />
       </div>
@@ -24,108 +32,113 @@
 <script>
 import students from '@/assets/json/students.json'
 import CardViewComplete from "@/components/CardViewComplete.vue";
+import { reactive } from "vue";
 
 export default {
   components: {
     CardViewComplete,
   },
   setup() {
-    class StudentList {
-      #allFilters = {
-        rarity: [1, 2, 3],
-        school: ["Millennium", "Abydos"],
-        role: ["Attacker", "Healer"],
-        position: ["Middle", "Back"],
-        attack_type: ["Explosive", "Mystic"],
-        armor_type: ["Heavy", "Light"],
-        combat_class: ["Striker", "Special"],
-        weapon_type: ["AR", "HG"],
-        use_cover: [true, false],
-        urban: ["A", "B", "C", "D", "E"],
-        outdoors: ["A", "B", "C", "D", "E"],
-        indoors: ["A", "B", "C", "D", "E"],
+    const allFilters = {
+      rarity: [1, 2, 3],
+      school: ["Millennium", "Abydos"],
+      role: ["Attacker", "Healer"],
+      position: ["Middle", "Back"],
+      attack_type: ["Explosive", "Mystic"],
+      armor_type: ["Heavy", "Light"],
+      combat_class: ["Striker", "Special"],
+      weapon_type: ["AR", "HG"],
+      use_cover: [true, false],
+      urban: ["A", "B", "C", "D", "E"],
+      outdoors: ["A", "B", "C", "D", "E"],
+      indoors: ["A", "B", "C", "D", "E"],
+    };
+    class StudentFilter {
+      filter = {
+        rarity: [],
+        school: [],
+        role: [],
+        position: [],
+        attack_type: [],
+        armor_type: [],
+        combat_class: [],
+        weapon_type: [],
+        use_cover: [],
+        urban: [],
+        outdoors: [],
+        indoors: [],
       };
-      constructor(students, rarity, school, role, position, attack_type, armor_type, combat_class, weapon_type, use_cover, urban, outdoors, indoors) {
-        this.students = students;
-        this.rarity = rarity;
-        this.school = school;
-        this.role = role;
-        this.position = position;
-        this.attack_type = attack_type;
-        this.armor_type = armor_type;
-        this.combat_class = combat_class;
-        this.weapon_type = weapon_type;
-        this.use_cover = use_cover;
-        this.urban = urban;
-        this.outdoors = outdoors;
-        this.indoors = indoors;
-        this.tosearch = [
-          "rarity","school","role","position","attack_type",
-          "armor_type","combat_class","weapon_type","use_cover",
-          "urban","outdoors","indoors",
-        ];
-      }
+      tags = [];
 
-      get myStudentList() {
-        const fields = this.thereFields();
-        let tags = [];
-        if (fields.length > 0) {
-          tags = this.isNewGroup();
-        }
-        else {
-          return false;
-        }
-        if (tags) {
-          return this.searchStudents(tags);
-        }
-        return [0];
-      }
+      addTags(tag, value) {
+        // Detectar si existe la categoria
+        if (Array.isArray(this.filter[tag])) {
+          // Comprobar si ya se encuentra almacenado el valor
+          const filterTagValueIndex = this.filter[tag].findIndex(item => item === value); 
+          const tagIndex = this.tags.findIndex(item => item === tag);
 
-      thereFields() {
-        this.tosearch = this.tosearch.filter(key => Array.isArray(this[key]));
-        return this.tosearch;
-      }
+          if (filterTagValueIndex < 0) {
+            this.filter[tag].push(value);
 
-      isNewGroup() {
-        const tags = [];
-        this.tosearch.forEach(keys => {
-          if (this[keys].length !== this.#allFilters[keys].length) {
-            tags.push(this[keys]);
+            this.#modifyTags(tagIndex, tag);
+          } else {
+            this.filter[tag].splice(filterTagValueIndex, 1);
+
+            this.#modifyTags(tagIndex, tag);
           }
-        });
-        console.info(tags)
-        if (tags.length === 0) {
-          return false;
-        } else {
-          return tags;
+        }
+      }
+      #modifyTags(index, tag) {
+        // Comprobar si ya se encuentra almacenado el tag
+        if (index < 0) {
+          this.tags.push(tag);
+        }
+
+        if (this.filter[tag].length === 0) {
+          const tagIndex = this.tags.findIndex(item => item === tag);
+          this.tags.splice(tagIndex, 1)
         }
       }
 
-      searchStudents(studentTags) {
-        const studentIds = [];
-        this.students.forEach((student, index) => {
-          let isInGroup = 0;
-          studentTags.forEach((tags, i) => {
-            tags.forEach(tag => {
-              if (student[this.tosearch[i]] === tag) {
-                  isInGroup += 1;
-              }
+      getStudentsByTags(students) {
+        if (this.tags.length > 0) {
+          let getStudents = students;
+          this.tags.forEach(tag => {
+            this.filter[tag].forEach(item => {
+              getStudents = getStudents.filter(student => student[tag] === item);
             })
           });
-          if (isInGroup === studentTags.length) {
-            studentIds.push(index)
-          }
-        });
-        return studentIds;
+          return getStudents;
+        } else {
+          console.warn('Tags are empty. Use addTags(tag, value).')
+          return false;
+        }
       }
     }
 
-    const studentGroup = new StudentList(students, [1]) // Esto debe ser una función, eliminar esto
+
+    const studentGroup = new StudentFilter;
+
+    let sg = reactive(students)
+
+    let newStudents = sg;
 
     return {
-      students,
-      studentGroup
+      newStudents,
+      allFilters,
+      studentGroup,
+      sg
     }
+  },
+  computed: {
+    myStudentsGroup() {
+      return this.newStudents;
+    },
+  },
+  methods: {
+    newStudentsGroup() {
+      this.newStudents = this.studentGroup.getStudentsByTags(students);
+    },
   }
 }
 </script>
