@@ -9,7 +9,7 @@
         <option
           v-for="(item, index) in filter"
           :value="item"
-          @click="studentGroup.addTags(name, item)"
+          @click="sf.addTags(name, item)"
           :key="index"
         >
           {{ item }}
@@ -19,11 +19,11 @@
     </section>
     <section class="flex flex-wrap">
       <div 
-        v-for="student in newStudents"
-        class="w-full sm:w-1/2 lg:w-1/3"
-        :key="student.name"
+        v-for="student in studentGroupIndex"
+        class="w-1/12"
+        :key="students[student].name"
       >
-        <card-view-complete :student="student" />
+        <card-view-complete :student="students[student]" />
       </div>
     </section>
   </main>
@@ -31,8 +31,8 @@
 
 <script>
 import students from '@/assets/json/students.json'
-import CardViewComplete from "@/components/CardViewComplete.vue";
-import { reactive } from "vue";
+import CardViewComplete from "@/components/ImageCard.vue";
+import { ref, reactive } from "vue";
 
 export default {
   components: {
@@ -80,15 +80,15 @@ export default {
           if (filterTagValueIndex < 0) {
             this.filter[tag].push(value);
 
-            this.#modifyTags(tagIndex, tag);
+            this.modifyTags(tagIndex, tag);
           } else {
             this.filter[tag].splice(filterTagValueIndex, 1);
 
-            this.#modifyTags(tagIndex, tag);
+            this.modifyTags(tagIndex, tag);
           }
         }
       }
-      #modifyTags(index, tag) {
+      modifyTags(index, tag) {
         // Comprobar si ya se encuentra almacenado el tag
         if (index < 0) {
           this.tags.push(tag);
@@ -102,13 +102,25 @@ export default {
 
       getStudentsByTags(students) {
         if (this.tags.length > 0) {
-          let getStudents = students;
-          this.tags.forEach(tag => {
-            this.filter[tag].forEach(item => {
-              getStudents = getStudents.filter(student => student[tag] === item);
-            })
+          let sg = students;
+          let getStudents = [];
+          let getStudentsIndex = [];
+          this.tags.forEach((tag, i) => {
+            getStudents = getStudents.filter(student => student[tag] === this.filter[tag][0]);
+            sg.forEach((student, index) => {
+              if (student[tag] === this.filter[tag][0]) {
+                getStudents.push(student);
+                if (i === 0) {
+                  getStudentsIndex.push(index);
+                }
+              } else if (i > 0) {
+                getStudents.splice(index, 1);
+                getStudentsIndex.splice(index, 1);
+              }
+            });
+            sg = getStudents;
           });
-          return getStudents;
+          return getStudentsIndex;
         } else {
           console.warn('Tags are empty. Use addTags(tag, value).')
           return false;
@@ -116,29 +128,20 @@ export default {
       }
     }
 
-
-    const studentGroup = new StudentFilter;
-
-    let sg = reactive(students)
-
-    let newStudents = sg;
+    let studentGroupIndex = ref([...Array(students.length).keys()]);
+    let sf = reactive(new StudentFilter);
+    function newStudentsGroup() {
+      studentGroupIndex.value = sf.getStudentsByTags(students);
+      console.info(studentGroupIndex.value)
+    }
 
     return {
-      newStudents,
+      students,
       allFilters,
-      studentGroup,
-      sg
+      studentGroupIndex,
+      sf,
+      newStudentsGroup
     }
   },
-  computed: {
-    myStudentsGroup() {
-      return this.newStudents;
-    },
-  },
-  methods: {
-    newStudentsGroup() {
-      this.newStudents = this.studentGroup.getStudentsByTags(students);
-    },
-  }
 }
 </script>
