@@ -148,8 +148,7 @@ export default {
       allFilters,
       studentGroupIndex,
       sf,
-      newStudentsGroup,
-      combatClass
+      newStudentsGroup
     }
   },
 }
