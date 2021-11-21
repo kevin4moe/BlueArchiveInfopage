@@ -1,5 +1,5 @@
 <template>
-  <main class="flex flex-col bg-blue-100">
+  <main class="flex flex-col h-screen bg-blue-100">
     <section class="flex justify-center flex-wrap mt-2 mx-2 rounded bg-white shadow">
       <select 
         v-for="(filter, name) in allFilters"
@@ -50,9 +50,9 @@ export default {
       armor_type: ["DEF", "Heavy", "Light", "Special"],
       weapon_type: ["Weapon","HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"],
       use_cover: ["Use cover?", true, false],
-      urban: ["Urban", "A", "B", "C", "D", "E"],
-      outdoors: ["Outdoors", "A", "B", "C", "D", "E"],
-      indoors: ["Indoors", "A", "B", "C", "D", "E"],
+      urban: ["Urban", "S", "A", "B", "C", "D"],
+      outdoors: ["Outdoors", "S", "A", "B", "C", "D"],
+      indoors: ["Indoors", "S", "A", "B", "C", "D"],
     };
     class StudentFilter {
       filter = {
@@ -81,30 +81,16 @@ export default {
         const isTag = this.noTags.findIndex(noTag => noTag === value);
         // Detectar si existe la categoria
         if (isTag < 0) {
-          // Comprobar si ya se encuentra almacenado el valor
-          const filterTagValueIndex = this.filter[tag].findIndex(item => item === value); 
-          const tagIndex = this.tags.findIndex(item => item === tag);
-
-          if (filterTagValueIndex < 0) {
-            this.filter[tag].push(value);
-
-            this.modifyTags(tagIndex, tag);
+          if (this.tags.includes(tag)) {
+            this.filter[tag][0] = value;
           } else {
-            this.filter[tag].splice(filterTagValueIndex, 1);
-
-            this.modifyTags(tagIndex, tag);
+            this.tags.push(tag);
+            this.filter[tag].push(value);
           }
-        }
-      }
-      modifyTags(index, tag) {
-        // Comprobar si ya se encuentra almacenado el tag
-        if (index < 0) {
-          this.tags.push(tag);
-        }
-
-        if (this.filter[tag].length === 0) {
-          const tagIndex = this.tags.findIndex(item => item === tag);
-          this.tags.splice(tagIndex, 1)
+        } else {
+          const tagIndex = this.tags.findIndex(tg => tg === tag);
+          this.tags.splice(tagIndex, 1);
+          this.filter[tag].splice(0, 1);
         }
       }
 
@@ -117,6 +103,7 @@ export default {
             getStudents = [];
             getStudentsIndex = [];
             sg.forEach((student) => {
+              console.warn(`${student[tag]} === ${this.filter[tag][0]}`)
               if (student[tag] === this.filter[tag][0]) {
                 console.info(`${student[tag]} === ${this.filter[tag][0]}`)
                 getStudents.push(student);
