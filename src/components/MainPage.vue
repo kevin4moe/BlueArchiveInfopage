@@ -113,19 +113,19 @@ export default {
           let sg = students;
           let getStudents = [];
           let getStudentsIndex = [];
-          this.tags.forEach((tag, i) => {
-            getStudents = getStudents.filter(student => student[tag] === this.filter[tag][0]);
-            sg.forEach((student, index) => {
+          this.tags.forEach((tag) => {
+            getStudents = [];
+            getStudentsIndex = [];
+            sg.forEach((student) => {
               if (student[tag] === this.filter[tag][0]) {
+                console.info(`${student[tag]} === ${this.filter[tag][0]}`)
                 getStudents.push(student);
-                if (i === 0) {
-                  getStudentsIndex.push(index);
-                }
-              } else if (i > 0) {
-                getStudents.splice(index, 1);
-                getStudentsIndex.splice(index, 1);
+
+                const gsIndex = students.findIndex(gs => gs.name === student.name)
+                getStudentsIndex.push(gsIndex);
               }
             });
+            console.info(getStudents)
             sg = getStudents;
           });
           return getStudentsIndex;
