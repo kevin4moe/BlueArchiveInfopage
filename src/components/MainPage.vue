@@ -1,5 +1,5 @@
 <template>
-  <main class="flex flex-col h-screen bg-blue-100">
+  <main class="flex flex-col min-h-screen bg-blue-100">
     <section class="flex justify-center flex-wrap mt-2 mx-2 rounded bg-white shadow">
       <select 
         v-for="(filter, name) in allFilters"
