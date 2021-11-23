@@ -1,3 +1,4 @@
 public/students/*.png filter=lfs diff=lfs merge=lfs -text
+public/*.png filter=lfs diff=lfs merge=lfs -text
 src/assets/students/icons/*.jpg filter=lfs diff=lfs merge=lfs -text
 src/assets/icons/*.png filter=lfs diff=lfs merge=lfs -text
