@@ -1,5 +1,5 @@
 <template>
-  <img class="w-full h-auto" :src="require(`@/assets/students/${student.name}.png`)" alt="">
+  <img class="w-full h-auto" :src="require(`@/assets/students/icons/${student.name}.jpg`)" alt="">
 </template>
 
 <script>
