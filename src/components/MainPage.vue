@@ -26,6 +26,9 @@
       >
         <card-view-complete :student="students[student]" />
       </div>
+      <div v-if="studentGroupIndex.length < 74" class="w-full">
+        <p class="my-4 text-center"><button class="py-2 px-4 rounded bg-white" @click="getAllStudents">See all</button></p>
+      </div>
     </section>
   </main>
 </template>
@@ -124,7 +127,10 @@ export default {
       }
     }
 
-    let studentGroupIndex = ref([...Array(students.length).keys()]);
+    let studentGroupIndex = ref([...Array(15).keys()]);
+    function getAllStudents() {
+      studentGroupIndex.value = [...Array(students.length).keys()]
+    }
     let sf = reactive(new StudentFilter);
     function newStudentsGroup() {
       studentGroupIndex.value = sf.getStudentsByTags(students);
@@ -135,6 +141,7 @@ export default {
       allFilters,
       studentGroupIndex,
       sf,
+      getAllStudents,
       newStudentsGroup
     }
   },
