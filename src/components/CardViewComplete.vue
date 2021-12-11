@@ -15,16 +15,7 @@
         </div>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-y-4 gap-x-px">
-        <tag-card title="School" :content="student.school" />
-        <tag-card title="Role" :content="student.role" />
-        <tag-card title="Position" :content="student.position" />
-        <tag-card title="Attack type" :content="student.attack_type" />
-        <tag-card title="Armor type" :content="student.armor_type" />
-        <tag-card title="Combat class" :content="student.combat_class" />
-        <tag-card title="Weapon type" :content="student.weapon_type" />
-        <tag-card title="User cover?" :content="ifIsUserCover(student.user_cover)" />
-        <tag-card title="JP release date" :content="student.release_date_jp" />
-        <tag-card title="Global release date" :content="student.release_date_global" />
+        <tag-card v-for="(desc, title) in rowDataStudent" :title="desc" :content="student[title]" :key="title" />
       </div>
     </body>
   </section>
@@ -38,24 +29,40 @@ export default {
   props: {
     student: Object,
   },
-  data: function () {
-    return {
-      locations: ["urban", "outdoors", "indoors"],
-    }
-  },
   components: {
     TagCard,
     TagIcon,
   },
-  methods: {
-    moodLocation(mood){
+  setup() {
+    const rowDataStudent = {
+      school: "School",
+      role: "Role",
+      position: "Position",
+      attack_type: "Attack type",
+      armor_type: "Armor type",
+      combat_class: "Combat class",
+      weapon_type: "Weapon type",
+      use_cover: "Use cover?",
+      release_date_jp: "JP release date",
+      release_date_global: "Global release date" 
+    }
+    const locations = ["urban", "outdoors", "indoors"];
+
+    function moodLocation(mood){
       const path = `mood_${mood.toLowerCase()}`
       return path;
-    },
-    ifIsUserCover(isUC) {
+    }
+    function ifIsUserCover(isUC) {
       const is = (isUC)?"Yes":"No";
       return is;
     }
-  }
+
+    return {
+      rowDataStudent,
+      locations,
+      moodLocation,
+      ifIsUserCover,
+    }
+  },
 }
 </script>
