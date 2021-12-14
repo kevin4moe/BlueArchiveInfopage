@@ -18,13 +18,13 @@
       </select>
       <button @click="newStudentsGroup">Search</button>
     </section>
-    <section class="flex flex-wrap">
+    <section class="flex flex-row flex-wrap justify-center">
       <div 
         v-for="student in studentGroupIndex"
-        class="w-full sm:w-1/2 md:w-1/3"
+        class="flex flex-row flex-wrap"
         :key="students[student].name"
       >
-        <card-view-complete :student="students[student]" />
+        <component :is="currentComponent" :student="students[student]" />
       </div>
       <div v-if="studentGroupIndex.length < 74" class="w-full">
         <p class="my-4 text-center"><button class="py-2 px-4 rounded bg-white" @click="getAllStudents">See all</button></p>
@@ -35,13 +35,14 @@
 
 <script>
 import students from '@/assets/json/students.json'
-import CardViewComplete from "@/components/CardViewComplete.vue";
-import { ref, reactive } from "vue";
+import { ref, reactive, defineAsyncComponent, computed  } from "vue";
 import StudentFilter from "@/assets/js/student-filter.js";
 
 export default {
   components: {
-    CardViewComplete,
+        CardViewComplete: defineAsyncComponent(() => import('@/components/CardViewComplete.vue')),
+        CardViewBasicInfo: defineAsyncComponent(() => import('@/components/CardViewBasicInfo.vue')),
+        CardViewOnlyChar: defineAsyncComponent(() => import('@/components/CardViewOnlyChar.vue'))
   },
   setup() {
     const allFilters = {
@@ -68,11 +69,21 @@ export default {
       studentGroupIndex.value = sf.getStudentsByTags(students);
     }
 
+    const cards = ["Complete", "BasicInfo", "OnlyChar"];
+    let currentCard = ref("OnlyChar");
+    const currentComponent = computed (() =>  {
+      console.info(currentCard.value)
+      return "CardView" + currentCard.value;
+    });
+
     return {
       students,
       allFilters,
       studentGroupIndex,
       sf,
+      cards,
+      currentCard,
+      currentComponent,
       getAllStudents,
       newStudentsGroup
     }

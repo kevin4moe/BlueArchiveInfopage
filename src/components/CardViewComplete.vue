@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full flex flex-wrap">
+  <section>
     <body class="w-full m-2 p-2 border rounded-md bg-white shadow ">
       <div class="w-1/3 h-auto float-right">
         <h1 class="text-center text-lg font-extrabold">{{ student.name }}</h1>
