@@ -1,23 +1,6 @@
 <template>
   <main class="flex flex-col min-h-screen bg-blue-100">
-    <section class="flex justify-center flex-wrap mt-2 mx-2 rounded bg-white shadow">
-      <select 
-        v-for="(filter, name) in allFilters"
-        :name="name"
-        class="my-px mx-1 rounded"
-        :key="name"
-      >
-        <option
-          v-for="(item, index) in filter"
-          :value="item"
-          @click="sf.addTags(name, item)"
-          :key="index"
-        >
-          {{ item }}
-        </option>
-      </select>
-      <button @click="newStudentsGroup">Search</button>
-    </section>
+    <search-settings @addTags="consola" />
     <section class="flex flex-row flex-wrap justify-center">
       <div 
         v-for="student in studentGroupIndex"
@@ -34,32 +17,19 @@
 </template>
 
 <script>
+import SearchSettings from "@/components/SearchSettings.vue";
 import students from '@/assets/json/students.json'
 import { ref, reactive, defineAsyncComponent, computed  } from "vue";
 import StudentFilter from "@/assets/js/student-filter.js";
 
 export default {
   components: {
-        CardViewComplete: defineAsyncComponent(() => import('@/components/CardViewComplete.vue')),
-        CardViewBasicInfo: defineAsyncComponent(() => import('@/components/CardViewBasicInfo.vue')),
-        CardViewOnlyChar: defineAsyncComponent(() => import('@/components/CardViewOnlyChar.vue'))
+    SearchSettings,
+    CardViewComplete: defineAsyncComponent(() => import('@/components/CardViewComplete.vue')),
+    CardViewBasicInfo: defineAsyncComponent(() => import('@/components/CardViewBasicInfo.vue')),
+    CardViewOnlyChar: defineAsyncComponent(() => import('@/components/CardViewOnlyChar.vue'))
   },
   setup() {
-    const allFilters = {
-      combat_class: ["Combat Class", "Striker", "Special"],
-      rarity: ["Rarity", 1, 2, 3],
-      school: ["Academy","Abydos","Trinity","Gehenna","Millennium","Red Winter","Valkyrie","Hyakkiyako","Shanhaijing"],
-      role: ["Role","Attacker","Supporter","Tank","Healer"],
-      position: ["Position","Front","Middle","Back"],
-      attack_type: ["ATK", "Penetration", "Explosive", "Mystic"],
-      armor_type: ["DEF", "Heavy", "Light", "Special"],
-      weapon_type: ["Weapon","HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"],
-      use_cover: ["Use cover?", true, false],
-      urban: ["Urban", "S", "A", "B", "C", "D"],
-      outdoors: ["Outdoors", "S", "A", "B", "C", "D"],
-      indoors: ["Indoors", "S", "A", "B", "C", "D"],
-    };
-
     let studentGroupIndex = ref([...Array(15).keys()]);
     function getAllStudents() {
       studentGroupIndex.value = [...Array(students.length).keys()]
@@ -75,17 +45,22 @@ export default {
       console.info(currentCard.value)
       return "CardView" + currentCard.value;
     });
+    
+    function consola(a, b) {
+      console.info(a, b)
+      sf.addTags(a, b)
+    }
 
     return {
       students,
-      allFilters,
       studentGroupIndex,
       sf,
       cards,
       currentCard,
       currentComponent,
       getAllStudents,
-      newStudentsGroup
+      newStudentsGroup,
+      consola
     }
   },
 }
