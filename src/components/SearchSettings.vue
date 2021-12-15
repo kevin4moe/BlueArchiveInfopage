@@ -15,13 +15,13 @@
         {{ item }}
       </option>
     </select>
-    <button @click="newStudentsGroup">Search</button>
+    <button @click="$emit('newGroup')">Search</button>
   </section>
 </template>
 
 <script>
 export default {
-  emits: ["addTags"],
+  emits: ["addTags", "newGroup"],
   setup(){
     const allFilters = {
       combat_class: ["Combat Class", "Striker", "Special"],

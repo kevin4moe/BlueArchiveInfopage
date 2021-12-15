@@ -1,6 +1,6 @@
 <template>
   <main class="flex flex-col min-h-screen bg-blue-100">
-    <search-settings @addTags="consola" />
+    <search-settings @addTags="addTag" @newGroup="newStudentsGroup" />
     <section class="flex flex-row flex-wrap justify-center">
       <div 
         v-for="student in studentGroupIndex"
@@ -46,9 +46,8 @@ export default {
       return "CardView" + currentCard.value;
     });
     
-    function consola(a, b) {
-      console.info(a, b)
-      sf.addTags(a, b)
+    function addTag(a, b) {
+      sf.addTags(a, b);
     }
 
     return {
@@ -60,7 +59,7 @@ export default {
       currentComponent,
       getAllStudents,
       newStudentsGroup,
-      consola
+      addTag
     }
   },
 }
