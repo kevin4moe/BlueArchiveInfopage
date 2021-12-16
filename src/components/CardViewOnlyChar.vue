@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-row flex-wrap">
     <main
-      :class="`inline-flex flex-col w-auto h-auto m-2 p-2 border rounded-md shadow bg-gradient-to-r from-${colors[student.attack_type]} to-${colors[student.armor_type]}`"
+      :class="`inline-flex flex-col w-auto h-auto m-2 p-2 border rounded-md shadow bg-gradient-to-r ${colors[student.attack_type]} ${colors[student.armor_type]}`"
     >
       <div>
         <img class="lazyload w-full h-auto rounded-lg" :src="require(`@/assets/students/icons/${student.name}.jpg`)" alt="">
@@ -17,12 +17,12 @@ export default {
   },
   setup() {
     const colors = {
-      "Penetration": "yellow-400",
-      "Explosive": "red-400",
-      "Mystic": "blue-400",
-      "Heavy": "yellow-700",
-      "Light": "red-700",
-      "Special": "blue-700"
+      "Penetration": "from-yellow-400",
+      "Explosive": "from-red-400",
+      "Mystic": "from-blue-400",
+      "Heavy": "to-yellow-700",
+      "Light": "to-red-700",
+      "Special": "to-blue-700"
     }
 
     return {
