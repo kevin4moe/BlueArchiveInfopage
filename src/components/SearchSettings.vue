@@ -10,6 +10,7 @@
         v-for="(item, index) in filter"
         :value="item"
         @click="$emit('addTags', name, item)"
+        @select="$emit('addTags', name, item)"
         :key="index"
       >
         {{ item }}
