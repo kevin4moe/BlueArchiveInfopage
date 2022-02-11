@@ -36,23 +36,46 @@
         </li>
       </ol>
     </section>
-    <section class="flex flex-col">
-      <ol class="flex flex-row h-7 text-white font-semibold">
+    <section class="flex flex-col justify-evenly w-40">
+      <ol class="flex flex-row justify-center h-7 text-white font-semibold">
         <li
-          class="px-3 rounded-l"
+          class="w-1/2 rounded-l text-center"
           :class="{'bg-red-800':combatClass.striker.active, 'bg-gray-300 text-black':!combatClass.striker.active}"
           @click="combatClass.striker.active = !combatClass.striker.active"
         >
           {{ combatClass.striker.name }}
         </li>
         <li
-          class="px-3 rounded-r"
+          class="w-1/2 rounded-r text-center"
           :class="{'bg-blue-800':combatClass.special.active, 'bg-gray-200 text-black':!combatClass.special.active}"
           @click="combatClass.special.active = !combatClass.special.active"
         >
           {{ combatClass.special.name }}
         </li>
       </ol>
+      <ol class="hidden h-7 font-semibold">
+        <li
+          class="w-1/2 rounded-l border-t border-b border-l border-black text-center"
+          :class="{'bg-black text-white':useCover.active, 'bg-white text-black':!useCover.active}"
+          @click="useCover.active = !useCover.active"
+        >
+          Sí
+        </li>
+        <li
+          class="w-1/2 rounded-r border-t border-b border-r border-black text-center"
+          :class="{'bg-white text-black':useCover.active, 'bg-black text-white':!useCover.active}"
+          @click="useCover.active = !useCover.active"
+        >
+          No
+        </li>
+      </ol>
+      <button
+        class="h-7 rounded border border-black text-center"
+        :class="{'bg-white text-black':!useCover.active, 'bg-gray-800 text-white font-semibold':useCover.active}"
+        @click="useCover.active = !useCover.active"
+      >
+        ¿Cobertura? {{ useCover.active ? "Sí" : "No" }}
+      </button>
     </section>
     <button @click="$emit('newGroup')">Search</button>
   </nav>
@@ -105,12 +128,16 @@ export default {
       striker: {name: "Striker", active: true},
       special: {name: "Special", active: true}
     });
+    const useCover = reactive({
+      isTrue: true
+    });
 
     return {
       allFilters,
       locations,
       rarity,
-      combatClass
+      combatClass,
+      useCover
     }
   },
   computed: {
