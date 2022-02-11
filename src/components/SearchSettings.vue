@@ -3,7 +3,7 @@
     <select 
       v-for="(filter, name) in allFilters"
       :name="name"
-      class="my-px mx-1 rounded"
+      class="hidden my-px mx-1 p-4 border-black rounded"
       :key="name"
     >
       <option
@@ -16,11 +16,22 @@
         {{ item }}
       </option>
     </select>
+    <ol class="flex flex-row">
+      <li v-for="(location, name) in locations" class="px-2" :key="name">
+        <img 
+          :src="require(`@/assets/icons/${location.img}`)"
+          :class="{filter: location.active, grayscale: location.active}"
+          @click="location.active = !locations[name].active"
+          alt=""
+        />
+      </li>
+    </ol>
     <button @click="$emit('newGroup')">Search</button>
   </section>
 </template>
 
 <script>
+import {reactive} from "vue";
 export default {
   emits: ["addTags", "newGroup"],
   setup(){
@@ -38,9 +49,31 @@ export default {
       outdoors: ["Outdoors", "S", "A", "B", "C", "D"],
       indoors: ["Indoors", "S", "A", "B", "C", "D"],
     };
+    const locations = reactive({
+      urban: {
+        active: false,
+        img: "location_urban.png",
+      },
+      outdoors: {
+        active: false,
+        img: "location_outdoors.png",
+      },
+      indoors: {
+        active: false,
+        img: "location_indoors.png",
+      },
+    })
 
     return {
-      allFilters
+      allFilters,
+      locations
+    }
+  },
+  computed: {
+    colorIfActive() {
+      return {
+        'bg-white': true
+      }
     }
   }
 }
