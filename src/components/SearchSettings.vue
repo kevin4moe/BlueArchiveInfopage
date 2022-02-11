@@ -26,6 +26,15 @@
         />
       </li>
     </ol>
+    <ol class="flex flex-row">
+      <li v-for="stars in rarity.show" :key="stars">
+        <img 
+          src="@/assets/icons/star.png"
+          @click="rarity.change"
+          alt="stars"
+        />
+      </li>
+    </ol>
     <button @click="$emit('newGroup')">Search</button>
   </section>
 </template>
@@ -62,11 +71,22 @@ export default {
         active: false,
         img: "location_indoors.png",
       },
-    })
+    });
+    const rarity = reactive({
+      show: 3,
+      change: () => {
+        if (rarity.show < 3) {
+          rarity.show = ++rarity.show;
+        } else {
+          rarity.show = 1;
+        }
+      }
+    });
 
     return {
       allFilters,
-      locations
+      locations,
+      rarity
     }
   },
   computed: {
