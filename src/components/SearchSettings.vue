@@ -77,12 +77,20 @@
         ¿Cobertura? {{ useCover.active ? "Sí" : "No" }}
       </button>
     </section>
+    <section class="flex flex-col justify-evenly w-40">
+      <select class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-bold">
+        <option value="Any">Cualquiera</option>
+        <option v-for="weapon in weapons" :value="weapon" :key="weapon">
+          {{ weapon }}
+        </option>
+      </select>
+    </section>
     <button @click="$emit('newGroup')">Search</button>
   </nav>
 </template>
 
 <script>
-import {reactive} from "vue";
+import { reactive } from "vue";
 export default {
   emits: ["addTags", "newGroup"],
   setup(){
@@ -94,8 +102,8 @@ export default {
       position: ["Position","Front","Middle","Back"],
       attack_type: ["ATK", "Penetration", "Explosive", "Mystic"],
       armor_type: ["DEF", "Heavy", "Light", "Special"],
-      weapon_type: ["Weapon","HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"],
-      use_cover: ["Use cover?", true, false],
+      //weapon_type: ["Weapon","HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"],
+      //use_cover: ["Use cover?", true, false],
       //urban: ["Urban", "S", "A", "B", "C", "D"],
       //outdoors: ["Outdoors", "S", "A", "B", "C", "D"],
       //indoors: ["Indoors", "S", "A", "B", "C", "D"],
@@ -131,13 +139,15 @@ export default {
     const useCover = reactive({
       isTrue: true
     });
+    const weapons = reactive(["HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"]);
 
     return {
       allFilters,
       locations,
       rarity,
       combatClass,
-      useCover
+      useCover,
+      weapons
     }
   },
   computed: {
