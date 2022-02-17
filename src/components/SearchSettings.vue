@@ -139,7 +139,10 @@ export default {
     const useCover = reactive({
       isTrue: true
     });
-    const weapons = reactive(["HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"]);
+    const weapons = reactive({
+      type: ["HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"]
+      
+    });
 
     return {
       allFilters,
