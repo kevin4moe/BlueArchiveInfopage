@@ -17,7 +17,7 @@
       </option>
     </select>
     <section class="flex flex-col">
-      <ol class="flex flex-row">
+      <ol class="flex flex-row my-1">
         <li v-for="(place, placeName) in locations.place" class="px-2" :key="placeName">
           <img 
             :src="require(`@/assets/icons/${place.img}`)"
@@ -27,7 +27,11 @@
           />
         </li>
       </ol>
-      <ol class="flex flex-row justify-evenly" @click="rarity.change">
+      <ol class="flex flex-row justify-evenly mb-1" @click="rarity.change">
+        <li class="flex flex-row items-center text-xl" v-show="rarity.show === 0">
+          All&nbsp;
+          <img src="@/assets/icons/star.png" alt="stars" />
+        </li>
         <li v-for="stars in rarity.show" :key="stars">
           <img 
             src="@/assets/icons/star.png"
@@ -56,25 +60,25 @@
       <ol class="hidden h-7 font-semibold">
         <li
           class="w-1/2 rounded-l border-t border-b border-l border-black text-center"
-          :class="{'bg-black text-white':useCover.active, 'bg-white text-black':!useCover.active}"
-          @click="useCover.active = !useCover.active"
+          :class="{'bg-black text-white':useCover, 'bg-white text-black':!useCover}"
+          @click="useCover = !useCover"
         >
           Sí
         </li>
         <li
           class="w-1/2 rounded-r border-t border-b border-r border-black text-center"
-          :class="{'bg-white text-black':useCover.active, 'bg-black text-white':!useCover.active}"
-          @click="useCover.active = !useCover.active"
+          :class="{'bg-white text-black':useCover, 'bg-black text-white':!useCover}"
+          @click="useCover = !useCover"
         >
           No
         </li>
       </ol>
       <button
         class="h-7 rounded border border-black text-center"
-        :class="{'bg-white text-black':!useCover.active, 'bg-gray-800 text-white font-semibold':useCover.active}"
-        @click="useCover.active = !useCover.active"
+        :class="{'bg-white text-black':!useCover, 'bg-gray-800 text-white font-semibold':useCover}"
+        @click="useCover = !useCover"
       >
-        ¿Cobertura? {{ useCover.active ? "Sí" : "No" }}
+        ¿Cobertura? {{ useCover ? "Sí" : "No" }}
       </button>
     </section>
     <section class="flex flex-col justify-evenly w-40">
@@ -90,7 +94,7 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { ref, reactive, watch } from "vue";
 export default {
   emits: ["addTags", "newGroup"],
   setup(){
@@ -108,6 +112,28 @@ export default {
       //outdoors: ["Outdoors", "S", "A", "B", "C", "D"],
       //indoors: ["Indoors", "S", "A", "B", "C", "D"],
     };
+
+    const rarity = reactive({
+      show: 0,
+      change: () => {
+        if (rarity.show < 3) {
+          rarity.show = ++rarity.show;
+        } else {
+          rarity.show = 0;
+        }
+      }
+    });
+    const combatClass = reactive({
+      striker: {name: "Striker", active: true},
+      special: {name: "Special", active: true}
+    });
+    const useCover = ref(true);
+    const weapons = reactive({
+      type: ["HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"],
+      current: false
+    });
+
+    const sort = [false, false]
     const locations = reactive({
       place: {
         urban: {
@@ -136,27 +162,50 @@ export default {
         }
       }
     });
-    const rarity = reactive({
-      show: 3,
-      change: () => {
-        if (rarity.show < 3) {
-          rarity.show = ++rarity.show;
-        } else {
-          rarity.show = 1;
-        }
+    watch(
+      () => locations.sortBy,
+      (sortBy) => {
+        sort[0] = "position";
+        sort[1] = sortBy;
       }
-    });
-    const combatClass = reactive({
-      striker: {name: "Striker", active: true},
-      special: {name: "Special", active: true}
-    });
-    const useCover = reactive({
-      isTrue: true
-    });
-    const weapons = reactive({
-      type: ["HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"],
-      current: false
-    });
+    )
+
+    let searchFilters = {
+      combat_class: false,
+      rarity: false,
+      school: false,
+      role: false,
+      position: false,
+      attack_type: false,
+      armor_type: false,
+      weapon_type: false,
+      use_cover: false,
+      urban: false,
+      outdoors: false,
+      indoors: false,
+    };
+
+    function updateSearchFilters() {
+      searchFilters = {
+        combat_class: {
+          striker: combatClass.striker.active,
+          special: combatClass.special.active,
+        },
+        rarity: rarity.show,
+        school: false,
+        role: false,
+        position: false,
+        attack_type: false,
+        armor_type: false,
+        weapon_type: weapons.current,
+        use_cover: useCover,
+        sort_by: [false, false],
+      };
+      if(searchFilters.role) {
+        console.log(searchFilters)
+      }
+    }
+    updateSearchFilters()
 
     return {
       allFilters,
@@ -164,7 +213,7 @@ export default {
       rarity,
       combatClass,
       useCover,
-      weapons
+      weapons,
     }
   },
   computed: {
@@ -173,6 +222,6 @@ export default {
         'bg-white': true
       }
     }
-  }
+  },
 }
 </script>
