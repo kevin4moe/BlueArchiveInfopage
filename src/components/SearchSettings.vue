@@ -18,11 +18,11 @@
     </select>
     <section class="flex flex-col">
       <ol class="flex flex-row">
-        <li v-for="(location, name) in locations" class="px-2" :key="name">
+        <li v-for="(place, placeName) in locations.place" class="px-2" :key="placeName">
           <img 
-            :src="require(`@/assets/icons/${location.img}`)"
-            :class="{filter: location.active, grayscale: location.active}"
-            @click="location.active = !locations[name].active"
+            :src="require(`@/assets/icons/${place.img}`)"
+            :class="{filter: !place.active, grayscale: !place.active}"
+            @click="locations.whichLocation(placeName)"
             alt=""
           />
         </li>
@@ -79,8 +79,8 @@
     </section>
     <section class="flex flex-col justify-evenly w-40">
       <select class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-bold">
-        <option value="Any">Cualquiera</option>
-        <option v-for="weapon in weapons" :value="weapon" :key="weapon">
+        <option value="Any" @click="weapons.current = false" @select="weapons.current = false">Cualquiera</option>
+        <option v-for="weapon in weapons.type" :value="weapon" :key="weapon" @click="weapons.current = weapon" @select="weapons.current = weapon">
           {{ weapon }}
         </option>
       </select>
@@ -109,18 +109,32 @@ export default {
       //indoors: ["Indoors", "S", "A", "B", "C", "D"],
     };
     const locations = reactive({
-      urban: {
-        active: false,
-        img: "location_urban.png",
+      place: {
+        urban: {
+          active: false,
+          img: "location_urban.png",
+        },
+        outdoors: {
+          active: false,
+          img: "location_outdoors.png",
+        },
+        indoors: {
+          active: false,
+          img: "location_indoors.png",
+        },
       },
-      outdoors: {
-        active: false,
-        img: "location_outdoors.png",
-      },
-      indoors: {
-        active: false,
-        img: "location_indoors.png",
-      },
+      sortBy: false,
+      whichLocation: (placeName) => {
+        if (locations.place[placeName].active) {
+          locations.place[placeName].active = false;
+          locations.sortBy = false;
+        } else {
+          (placeName === "urban") ? locations.place[placeName].active = true : locations.place.urban.active = false ; 
+          (placeName === "outdoors") ? locations.place[placeName].active = true : locations.place.outdoors.active = false ; 
+          (placeName === "indoors") ? locations.place[placeName].active = true : locations.place.indoors.active = false ;   
+          locations.sortBy = placeName;
+        }
+      }
     });
     const rarity = reactive({
       show: 3,
@@ -140,8 +154,8 @@ export default {
       isTrue: true
     });
     const weapons = reactive({
-      type: ["HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"]
-      
+      type: ["HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"],
+      current: false
     });
 
     return {
