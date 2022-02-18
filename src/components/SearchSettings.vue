@@ -16,78 +16,81 @@
         {{ item }}
       </option>
     </select>
-    <section class="flex flex-col">
-      <ol class="flex flex-row my-1">
-        <li v-for="(place, placeName) in locations.place" class="px-2" :key="placeName">
-          <img 
-            :src="require(`@/assets/icons/${place.img}`)"
-            :class="{filter: !place.active, grayscale: !place.active}"
-            @click="locations.whichLocation(placeName)"
-            alt=""
-          />
-        </li>
-      </ol>
-      <ol class="flex flex-row justify-evenly mb-1" @click="rarity.change">
-        <li class="flex flex-row items-center text-xl" v-show="rarity.show === 0">
-          All&nbsp;
-          <img src="@/assets/icons/star.png" alt="stars" />
-        </li>
-        <li v-for="stars in rarity.show" :key="stars">
-          <img 
-            src="@/assets/icons/star.png"
-            alt="stars"
-          />
-        </li>
-      </ol>
-    </section>
-    <section class="flex flex-col justify-evenly w-40">
-      <ol class="flex flex-row justify-center h-7 text-white font-semibold">
-        <li
-          class="w-1/2 rounded-l text-center"
-          :class="{'bg-red-800':combatClass.striker.active, 'bg-gray-300 text-black':!combatClass.striker.active}"
-          @click="combatClass.striker.active = !combatClass.striker.active"
-        >
-          {{ combatClass.striker.name }}
-        </li>
-        <li
-          class="w-1/2 rounded-r text-center"
-          :class="{'bg-blue-800':combatClass.special.active, 'bg-gray-200 text-black':!combatClass.special.active}"
-          @click="combatClass.special.active = !combatClass.special.active"
-        >
-          {{ combatClass.special.name }}
-        </li>
-      </ol>
-      <ol class="hidden h-7 font-semibold">
-        <li
-          class="w-1/2 rounded-l border-t border-b border-l border-black text-center"
-          :class="{'bg-black text-white':useCover, 'bg-white text-black':!useCover}"
+    <section class="flex flex-row">
+      <!-- Place & Rarity -->
+      <div class="flex flex-col">
+        <ol class="flex flex-row my-1">
+          <li v-for="(place, placeName) in locations.place" class="px-2" :key="placeName">
+            <img 
+              :src="require(`@/assets/icons/${place.img}`)"
+              :class="{filter: !place.active, grayscale: !place.active}"
+              @click="locations.whichLocation(placeName)"
+              alt=""
+            />
+          </li>
+        </ol>
+        <ol class="flex flex-row justify-evenly mb-1" @click="rarity.change">
+          <li class="flex flex-row items-center text-xl" v-show="rarity.show === 0">
+            All&nbsp;
+            <img src="@/assets/icons/star.png" alt="stars" />
+          </li>
+          <li v-for="stars in rarity.show" :key="stars">
+            <img 
+              src="@/assets/icons/star.png"
+              alt="stars"
+            />
+          </li>
+        </ol>
+      </div>
+      <!-- Combat Class & Use Cover? -->
+      <div class="flex flex-col justify-evenly w-40">
+        <ol class="flex flex-row justify-center h-7 text-white font-semibold">
+          <li
+            class="w-1/2 rounded-l text-center"
+            :class="{'bg-red-800':combatClass.striker.active, 'bg-gray-300 text-black':!combatClass.striker.active}"
+            @click="combatClass.striker.active = !combatClass.striker.active"
+          >
+            {{ combatClass.striker.name }}
+          </li>
+          <li
+            class="w-1/2 rounded-r text-center"
+            :class="{'bg-blue-800':combatClass.special.active, 'bg-gray-200 text-black':!combatClass.special.active}"
+            @click="combatClass.special.active = !combatClass.special.active"
+          >
+            {{ combatClass.special.name }}
+          </li>
+        </ol>
+        <button
+          class="h-7 rounded border border-black text-center"
+          :class="{'bg-white text-black':!useCover, 'bg-gray-800 text-white font-semibold':useCover}"
           @click="useCover = !useCover"
         >
-          Sí
-        </li>
-        <li
-          class="w-1/2 rounded-r border-t border-b border-r border-black text-center"
-          :class="{'bg-white text-black':useCover, 'bg-black text-white':!useCover}"
-          @click="useCover = !useCover"
-        >
-          No
-        </li>
-      </ol>
-      <button
-        class="h-7 rounded border border-black text-center"
-        :class="{'bg-white text-black':!useCover, 'bg-gray-800 text-white font-semibold':useCover}"
-        @click="useCover = !useCover"
-      >
-        ¿Cobertura? {{ useCover ? "Sí" : "No" }}
-      </button>
-    </section>
-    <section class="flex flex-col justify-evenly w-40">
-      <select class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-bold">
-        <option value="Any" @click="weapons.current = false" @select="weapons.current = false">Cualquiera</option>
-        <option v-for="weapon in weapons.type" :value="weapon" :key="weapon" @click="weapons.current = weapon" @select="weapons.current = weapon">
-          {{ weapon }}
-        </option>
-      </select>
+          ¿Cobertura? {{ useCover ? "Sí" : "No" }}
+        </button>
+      </div>
+      <!-- Weapon Type -->
+      <div class="flex flex-col justify-evenly w-40">
+        <select class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-bold">
+          <option value="Any" @click="weapons.current = false" @select="weapons.current = false">Cualquiera</option>
+          <option v-for="weapon in weapons.type" :value="weapon" :key="weapon" @click="weapons.current = weapon" @select="weapons.current = weapon">
+            {{ weapon }}
+          </option>
+        </select>
+      </div>
+      <!-- Position -->
+      <div class="flex flex-col justify-evenly w-22">
+        <select name="position" class="h-7 m-1 rounded bg-gray-800 text-center text-white font-semibold">
+          <option value="position" @click="position.current = false" @select="position.current = false">POSITION</option>
+          <option 
+            v-for="line in position.types"
+            :value="line" 
+            @click="position.current = line" @select="position.current = line"
+            :key="line"
+          >
+            {{ line.toUpperCase() }}
+          </option>
+        </select>
+      </div>
     </section>
     <button @click="$emit('newGroup')">Search</button>
   </nav>
@@ -169,6 +172,11 @@ export default {
         sort[1] = sortBy;
       }
     )
+    const position = reactive({
+      types: ["all", "front", "middle", "back"],
+      current: false,
+    })
+
 
     let searchFilters = {
       combat_class: false,
@@ -214,6 +222,7 @@ export default {
       combatClass,
       useCover,
       weapons,
+      position
     }
   },
   computed: {
