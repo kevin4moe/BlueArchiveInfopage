@@ -17,31 +17,6 @@
       </option>
     </select>
     <section class="flex flex-row">
-      <!-- Place & Rarity -->
-      <div class="flex flex-col">
-        <ol class="flex flex-row my-1">
-          <li v-for="(place, placeName) in locations.place" class="px-2" :key="placeName">
-            <img 
-              :src="require(`@/assets/icons/${place.img}`)"
-              :class="{filter: !place.active, grayscale: !place.active}"
-              @click="locations.whichLocation(placeName)"
-              alt=""
-            />
-          </li>
-        </ol>
-        <ol class="flex flex-row justify-evenly mb-1" @click="rarity.change">
-          <li class="flex flex-row items-center text-xl" v-show="rarity.show === 0">
-            All&nbsp;
-            <img src="@/assets/icons/star.png" alt="stars" />
-          </li>
-          <li v-for="stars in rarity.show" :key="stars">
-            <img 
-              src="@/assets/icons/star.png"
-              alt="stars"
-            />
-          </li>
-        </ol>
-      </div>
       <!-- Combat Class & Use Cover? -->
       <div class="flex flex-col justify-evenly w-40">
         <ol class="flex flex-row justify-center h-7 text-white font-semibold">
@@ -77,14 +52,43 @@
           </option>
         </select>
       </div>
+      <!-- Place & Rarity -->
+      <div class="flex flex-col">
+        <ol class="flex flex-row my-1">
+          <li v-for="(place, placeName) in locations.place" class="px-2" :key="placeName">
+            <img 
+              :src="require(`@/assets/icons/${place.img}`)"
+              :class="{filter: !place.active, grayscale: !place.active}"
+              @click="locations.whichLocation(placeName)"
+              alt=""
+            />
+          </li>
+        </ol>
+        <ol class="flex flex-row justify-evenly mb-1" @click="rarity.change">
+          <li class="flex flex-row items-center text-xl" v-show="rarity.show === 0">
+            ALL&nbsp;
+            <img src="@/assets/icons/star.png" alt="stars" />
+          </li>
+          <li class="flex flex-row items-center text-xl" v-show="rarity.show === -1">
+            ANY&nbsp;
+            <img src="@/assets/icons/star.png" alt="stars" />
+          </li>
+          <li v-for="stars in 3" v-show="stars <= rarity.show" :key="stars">
+            <img 
+              src="@/assets/icons/star.png"
+              alt="stars"
+            />
+          </li>
+        </ol>
+      </div>
       <!-- Position -->
       <div class="flex flex-col justify-evenly w-22">
         <select name="position" class="h-7 m-1 rounded bg-gray-800 text-center text-white font-semibold">
-          <option value="position" @click="position.current = false" @select="position.current = false">POSITION</option>
+          <option value="position" @click="position.sortBy = false" @select="position.sortBy = false">POSITION</option>
           <option 
             v-for="line in position.types"
             :value="line" 
-            @click="position.current = line" @select="position.current = line"
+            @click="position.sortBy = line" @select="position.sortBy = line"
             :key="line"
           >
             {{ line.toUpperCase() }}
@@ -92,7 +96,7 @@
         </select>
       </div>
     </section>
-    <button @click="$emit('newGroup')">Search</button>
+    <button @click="updateSearchFilters">Search</button>
   </nav>
 </template>
 
@@ -106,7 +110,7 @@ export default {
       //rarity: ["Rarity", 1, 2, 3],
       school: ["Academy","Abydos","Trinity","Gehenna","Millennium","Red Winter","Valkyrie","Hyakkiyako","Shanhaijing"],
       role: ["Role","Attacker","Supporter","Tank","Healer"],
-      position: ["Position","Front","Middle","Back"],
+      // position: ["Position","Front","Middle","Back"],
       attack_type: ["ATK", "Penetration", "Explosive", "Mystic"],
       armor_type: ["DEF", "Heavy", "Light", "Special"],
       //weapon_type: ["Weapon","HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"],
@@ -117,12 +121,12 @@ export default {
     };
 
     const rarity = reactive({
-      show: 0,
+      show: -1,
       change: () => {
         if (rarity.show < 3) {
           rarity.show = ++rarity.show;
         } else {
-          rarity.show = 0;
+          rarity.show = -1;
         }
       }
     });
@@ -168,14 +172,21 @@ export default {
     watch(
       () => locations.sortBy,
       (sortBy) => {
+        sort[0] = "locations";
+        sort[1] = sortBy;
+      }
+    );
+    const position = reactive({
+      types: ["all", "front", "middle", "back"],
+      sortBy: false,
+    });
+    watch(
+      () => position.sortBy,
+      (sortBy) => {
         sort[0] = "position";
         sort[1] = sortBy;
       }
-    )
-    const position = reactive({
-      types: ["all", "front", "middle", "back"],
-      current: false,
-    })
+    );
 
 
     let searchFilters = {
@@ -202,27 +213,25 @@ export default {
         rarity: rarity.show,
         school: false,
         role: false,
-        position: false,
+        position: position.sortBy,
         attack_type: false,
         armor_type: false,
         weapon_type: weapons.current,
-        use_cover: useCover,
-        sort_by: [false, false],
+        use_cover: useCover.value,
+        sort_by: sort,
       };
-      if(searchFilters.role) {
-        console.log(searchFilters)
-      }
+      console.log(searchFilters)
     }
-    updateSearchFilters()
 
     return {
+      updateSearchFilters,
       allFilters,
       locations,
       rarity,
       combatClass,
       useCover,
       weapons,
-      position
+      position,
     }
   },
   computed: {
