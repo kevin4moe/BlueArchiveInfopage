@@ -17,8 +17,48 @@
       </option>
     </select>
     <section class="flex flex-row">
+      <!-- ATK, DEF & Role -->
+      <div class="flex flex-col justify-evenly w-40 mx-1">
+        <div class="flex flex-row justify-center h-7">
+          <select name="attack_type" class="w-1/2 rounded-l bg-gray-800 text-center text-white font-semibold" :class="attack_type.colors[attack_type.current]">
+            <option value="attack_type" @click="attack_type.changeCurrent(false)" @select="attack_type.changeCurrent(false)">ATK</option>
+            <option 
+              v-for="(type, index) in attack_type.types"
+              :class="attack_type.colors[index]"
+              :value="type" 
+              @click="attack_type.changeCurrent(index)" @select="attack_type.changeCurrent(index)"
+              :key="type"
+            >
+              {{ type.toUpperCase() }}
+            </option>
+          </select>
+          <select name="armor_type" class="w-1/2 rounded-r bg-gray-800 text-center text-white font-semibold" :class="armor_type.colors[armor_type.current]">
+            <option value="armor_type" @click="armor_type.changeCurrent(false)" @select="armor_type.changeCurrent(false)">DEF</option>
+            <option 
+              v-for="(type, index) in armor_type.types"
+              :class="armor_type.colors[index]"
+              :value="type" 
+              @click="armor_type.changeCurrent(index)" @select="armor_type.changeCurrent(index)"
+              :key="type"
+            >
+              {{ type.toUpperCase() }}
+            </option>
+          </select>
+        </div>
+        <select name="role" class="h-7 rounded bg-gray-800 text-center text-white font-semibold">
+          <option value="role" @click="role.changeCurrent(false)" @select="role.changeCurrent(false)">ROLE</option>
+          <option 
+            v-for="type in role.types"
+            :value="type" 
+            @click="role.changeCurrent(type)" @select="role.changeCurrent(type)"
+            :key="type"
+          >
+            {{ type.toUpperCase() }}
+          </option>
+        </select>
+      </div>
       <!-- Combat Class & Use Cover? -->
-      <div class="flex flex-col justify-evenly w-40">
+      <div class="flex flex-col justify-evenly w-40 mx-1">
         <ol class="flex flex-row justify-center h-7 text-white font-semibold">
           <li
             class="w-1/2 rounded-l text-center"
@@ -45,10 +85,38 @@
       </div>
       <!-- Weapon Type -->
       <div class="flex flex-col justify-evenly w-40">
-        <select class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-bold">
+        <select name="weapon_type" class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-semibold">
           <option value="Any" @click="weapons.current = false" @select="weapons.current = false">Cualquiera</option>
           <option v-for="weapon in weapons.type" :value="weapon" :key="weapon" @click="weapons.current = weapon" @select="weapons.current = weapon">
             {{ weapon }}
+          </option>
+        </select>
+      </div>
+      <!-- Position -->
+      <div class="flex flex-col justify-evenly w-22">
+        <select name="position" class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-semibold">
+          <option value="position" @click="position.sortBy = false" @select="position.sortBy = false">POSITION</option>
+          <option 
+            v-for="line in position.types"
+            :value="line" 
+            @click="position.sortBy = line" @select="position.sortBy = line"
+            :key="line"
+          >
+            {{ line.toUpperCase() }}
+          </option>
+        </select>
+      </div>
+      <!-- School -->
+      <div class="flex flex-col justify-evenly w-40">
+        <select name="school" class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-semibold">
+          <option value="school" @click="school.changeCurrent(false)" @select="school.changeCurrent(false)">SCHOOL</option>
+          <option 
+            v-for="type in school.types"
+            :value="type" 
+            @click="school.changeCurrent(type)" @select="school.changeCurrent(type)"
+            :key="type"
+          >
+            {{ type.toUpperCase() }}
           </option>
         </select>
       </div>
@@ -81,20 +149,6 @@
           </li>
         </ol>
       </div>
-      <!-- Position -->
-      <div class="flex flex-col justify-evenly w-22">
-        <select name="position" class="h-7 m-1 rounded bg-gray-800 text-center text-white font-semibold">
-          <option value="position" @click="position.sortBy = false" @select="position.sortBy = false">POSITION</option>
-          <option 
-            v-for="line in position.types"
-            :value="line" 
-            @click="position.sortBy = line" @select="position.sortBy = line"
-            :key="line"
-          >
-            {{ line.toUpperCase() }}
-          </option>
-        </select>
-      </div>
     </section>
     <button @click="updateSearchFilters">Search</button>
   </nav>
@@ -108,11 +162,11 @@ export default {
     const allFilters = {
       //combat_class: ["Combat Class", "Striker", "Special"],
       //rarity: ["Rarity", 1, 2, 3],
-      school: ["Academy","Abydos","Trinity","Gehenna","Millennium","Red Winter","Valkyrie","Hyakkiyako","Shanhaijing"],
-      role: ["Role","Attacker","Supporter","Tank","Healer"],
-      // position: ["Position","Front","Middle","Back"],
-      attack_type: ["ATK", "Penetration", "Explosive", "Mystic"],
-      armor_type: ["DEF", "Heavy", "Light", "Special"],
+      //school: ["Academy","Abydos","Trinity","Gehenna","Millennium","Red Winter","Valkyrie","Hyakkiyako","Shanhaijing"],
+      //role: ["Role","Attacker","Supporter","Tank","Healer"],
+      //position: ["Position","Front","Middle","Back"],
+      //attack_type: ["ATK", "Penetration", "Explosive", "Mystic"],
+      //armor_type: ["DEF", "Heavy", "Light", "Special"],
       //weapon_type: ["Weapon","HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"],
       //use_cover: ["Use cover?", true, false],
       //urban: ["Urban", "S", "A", "B", "C", "D"],
@@ -138,6 +192,36 @@ export default {
     const weapons = reactive({
       type: ["HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"],
       current: false
+    });
+    const school = reactive({
+      types: ["Abydos","Trinity","Gehenna","Millennium","Red Winter","Valkyrie","Hyakkiyako","Shanhaijing"],
+      current: false,
+      changeCurrent: (type) => {
+        school.current = type;  
+      }
+    });
+    const role = reactive({
+      types: ["Attacker","Supporter","Tank","Healer"],
+      current: false,
+      changeCurrent: (type) => {
+        role.current = type;  
+      }
+    });
+    const attack_type = reactive({
+      types: ["Penetration", "Explosive", "Mystic"],
+      colors: ["bg-yellow-400", "bg-red-400", "bg-blue-400"],
+      current: false,
+      changeCurrent: (type) => {
+        attack_type.current = type;  
+      }
+    });
+    const armor_type = reactive({
+      types: ["Heavy", "Light", "Special"],
+      colors: ["bg-yellow-700", "bg-red-700", "bg-blue-700"],
+      current: false,
+      changeCurrent: (type) => {
+        armor_type.current = type;  
+      }
     });
 
     const sort = [false, false]
@@ -232,6 +316,10 @@ export default {
       useCover,
       weapons,
       position,
+      school,
+      role,
+      attack_type,
+      armor_type,
     }
   },
   computed: {
