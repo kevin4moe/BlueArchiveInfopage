@@ -5,10 +5,10 @@ export default createStore({
     rarity: -1,
     combatClass: {
       names: ["striker", "special"],
-      striker: true,
-      special: true,
+      striker: false,
+      special: false,
     },
-    useCover: true,
+    useCover: false,
     weaponsTypes: {
       types: ["HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"],
       value: false,
@@ -36,7 +36,7 @@ export default createStore({
       value: false
     },
     position: {
-      types: ["front", "middle", "back"],
+      types: ["Front", "Middle", "Back"],
       value: false
     },
     sortBy: "",

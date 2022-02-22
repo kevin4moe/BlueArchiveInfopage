@@ -1,21 +1,5 @@
 <template>
   <nav class="flex justify-center flex-wrap mt-2 mx-2 rounded bg-white shadow">
-    <select 
-      v-for="(filter, name) in allFilters"
-      :name="name"
-      class="hidden my-px mx-1 p-4 border-black rounded"
-      :key="name"
-    >
-      <option
-        v-for="(item, index) in filter"
-        :value="item"
-        @click="$emit('addTags', name, item)"
-        @select="$emit('addTags', name, item)"
-        :key="index"
-      >
-        {{ item }}
-      </option>
-    </select>
     <section class="flex flex-row">
       <!-- ATK, DEF & Role -->
       <div class="flex flex-col justify-evenly w-40 mx-1">
@@ -300,14 +284,14 @@
         </ol>
       </div>
     </section>
-    <button @click="true">Search</button>
+    <button @click="$emit('newGroup')">Search</button>
   </nav>
 </template>
 
 <script>
 import { useStore } from 'vuex'
 export default {
-  emits: ["addTags", "newGroup"],
+  emits: ["newGroup"],
   setup(){
     const store = useStore();
     
