@@ -1,4 +1,4 @@
-import { createStore } from 'vuex';
+import { createStore } from "vuex";
 
 export default createStore({
   state: {
@@ -10,15 +10,38 @@ export default createStore({
     },
     useCover: false,
     weaponsTypes: {
-      types: ["HG","SMG","AR","SR","SG","MG","GL","RG","RF","RL","DualSMG","DualMG","MountMG"],
+      types: [
+        "HG",
+        "SMG",
+        "AR",
+        "SR",
+        "SG",
+        "MG",
+        "GL",
+        "RG",
+        "RF",
+        "RL",
+        "DualSMG",
+        "DualMG",
+        "MountMG",
+      ],
       value: false,
     },
     school: {
-      types: ["Abydos","Trinity","Gehenna","Millennium","Red Winter","Valkyrie","Hyakkiyako","Shanhaijing"],
+      types: [
+        "Abydos",
+        "Trinity",
+        "Gehenna",
+        "Millennium",
+        "Red Winter",
+        "Valkyrie",
+        "Hyakkiyako",
+        "Shanhaijing",
+      ],
       value: false,
     },
     role: {
-      types: ["Attacker","Supporter","Tank","Healer"],
+      types: ["Attacker", "Supporter", "Tank", "Healer"],
       value: false,
     },
     attackType: {
@@ -32,12 +55,12 @@ export default createStore({
       value: false,
     },
     locations: {
-      types: ["urban","outdoors","indoors"],
-      value: false
+      types: ["urban", "outdoors", "indoors"],
+      value: false,
     },
     position: {
       types: ["Front", "Middle", "Back"],
-      value: false
+      value: false,
     },
     sortBy: "",
   },
@@ -47,7 +70,7 @@ export default createStore({
     },
     changeValueTypes: (state, filter) => {
       if (state[filter.name].value === filter.newValue) {
-        state[filter.name].value = false;  
+        state[filter.name].value = false;
       } else {
         state[filter.name].value = filter.newValue;
       }
@@ -61,10 +84,8 @@ export default createStore({
       } else {
         state.rarity = -1;
       }
-    }
+    },
   },
-  actions: {
-  },
-  modules: {
-  },
+  actions: {},
+  modules: {},
 });
