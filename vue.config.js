@@ -7,4 +7,10 @@ module.exports = {
       return argumentos;
     });
   },
+  pwa: {
+    workboxPluginMode: 'InjectManifest',
+    workboxOptions: {
+      swSrc: './src/sw.js',
+    }
+  },
 };
