@@ -2,14 +2,14 @@
   <section class="flex flex-row flex-wrap">
     <main
       :class="`inline-flex flex-col w-auto h-auto m-2 p-2 border rounded-md shadow bg-gradient-to-r ${
-        colors[student.attack_type]
-      } ${colors[student.armor_type]}`"
+        colors[student.attackType]
+      } ${colors[student.armorType]}`"
     >
       <div>
         <img
           class="lazyload w-full h-auto rounded-lg"
           :src="require(`@/assets/students/icons/${student.name}.jpg`)"
-          alt=""
+          :alt="student.name"
         />
       </div>
     </main>
