@@ -17,12 +17,6 @@
                   newValue: false,
                 })
               "
-              @select="
-                store.commit('changeValueTypes', {
-                  name: 'attackType',
-                  newValue: false,
-                })
-              "
             >
               ATK
             </option>
@@ -31,12 +25,6 @@
               :class="store.state.attackType.colors[index]"
               :value="type"
               @click="
-                store.commit('changeValueTypes', {
-                  name: 'attackType',
-                  newValue: index,
-                })
-              "
-              @select="
                 store.commit('changeValueTypes', {
                   name: 'attackType',
                   newValue: index,
@@ -60,12 +48,6 @@
                   newValue: false,
                 })
               "
-              @select="
-                store.commit('changeValueTypes', {
-                  name: 'armorType',
-                  newValue: false,
-                })
-              "
             >
               DEF
             </option>
@@ -74,12 +56,6 @@
               :class="store.state.armorType.colors[index]"
               :value="type"
               @click="
-                store.commit('changeValueTypes', {
-                  name: 'armorType',
-                  newValue: index,
-                })
-              "
-              @select="
                 store.commit('changeValueTypes', {
                   name: 'armorType',
                   newValue: index,
@@ -103,12 +79,6 @@
                 newValue: false,
               })
             "
-            @select="
-              store.commit('changeValueTypes', {
-                name: 'role',
-                newValue: false,
-              })
-            "
           >
             ROLE
           </option>
@@ -116,12 +86,6 @@
             v-for="(type, index) in store.state.role.types"
             :value="type"
             @click="
-              store.commit('changeValueTypes', {
-                name: 'role',
-                newValue: index,
-              })
-            "
-            @select="
               store.commit('changeValueTypes', {
                 name: 'role',
                 newValue: index,
@@ -143,6 +107,7 @@
               'bg-gray-300 text-black': !store.state.combatClass.striker,
             }"
             @click="store.commit('changeCombatClass', 'striker')"
+            @touch="store.commit('changeCombatClass', 'striker')"
           >
             {{ store.state.combatClass.names[0].toUpperCase() }}
           </li>
@@ -153,6 +118,7 @@
               'bg-gray-200 text-black': !store.state.combatClass.special,
             }"
             @click="store.commit('changeCombatClass', 'special')"
+            @touch="store.commit('changeCombatClass', 'special')"
           >
             {{ store.state.combatClass.names[1].toUpperCase() }}
           </li>
@@ -164,6 +130,12 @@
             'bg-gray-800 text-white font-semibold': store.state.useCover,
           }"
           @click="
+            store.commit('assignNewValue', {
+              name: 'useCover',
+              value: !store.state.useCover,
+            })
+          "
+          @touch="
             store.commit('assignNewValue', {
               name: 'useCover',
               value: !store.state.useCover,
@@ -187,12 +159,6 @@
                 newValue: false,
               })
             "
-            @select="
-              store.commit('changeValueTypes', {
-                name: 'weaponsTypes',
-                newValue: false,
-              })
-            "
           >
             WEAPONS
           </option>
@@ -201,12 +167,6 @@
             :value="weapon"
             :key="weapon"
             @click="
-              store.commit('changeValueTypes', {
-                name: 'weaponsTypes',
-                newValue: index,
-              })
-            "
-            @select="
               store.commit('changeValueTypes', {
                 name: 'weaponsTypes',
                 newValue: index,
@@ -231,24 +191,13 @@
                 newValue: false,
               })
             "
-            @select="
-              store.commit('changeValueTypes', {
-                name: 'position',
-                newValue: false,
-              })
-            "
           >
             POSITION
           </option>
           <option
+            class="hidden"
             value="position"
             @click="
-              store.commit('changeValueTypes', {
-                name: 'position',
-                newValue: -1,
-              })
-            "
-            @select="
               store.commit('changeValueTypes', {
                 name: 'position',
                 newValue: -1,
@@ -261,12 +210,6 @@
             v-for="(name, index) in store.state.position.types"
             :value="name"
             @click="
-              store.commit('changeValueTypes', {
-                name: 'position',
-                newValue: index,
-              })
-            "
-            @select="
               store.commit('changeValueTypes', {
                 name: 'position',
                 newValue: index,
@@ -292,12 +235,6 @@
                 newValue: false,
               })
             "
-            @select="
-              store.commit('changeValueTypes', {
-                name: 'school',
-                newValue: false,
-              })
-            "
           >
             SCHOOL
           </option>
@@ -305,12 +242,6 @@
             v-for="(type, index) in store.state.school.types"
             :value="type"
             @click="
-              store.commit('changeValueTypes', {
-                name: 'school',
-                newValue: index,
-              })
-            "
-            @select="
               store.commit('changeValueTypes', {
                 name: 'school',
                 newValue: index,
@@ -342,12 +273,6 @@
                   newValue: index,
                 })
               "
-              @select="
-                store.commit('changeValueTypes', {
-                  name: 'locations',
-                  newValue: index,
-                })
-              "
               :alt="name"
             />
           </li>
@@ -355,6 +280,7 @@
         <ol
           class="flex flex-row justify-evenly mb-1"
           @click="store.commit('changeRarity')"
+          @touch="store.commit('changeRarity')"
         >
           <li
             class="flex flex-row items-center text-xl"
@@ -383,6 +309,7 @@
     <button
       class="w-20 h-10 bg-blue-300 my-1 sm:my-auto lg:my-1 rounded-lg text-blue-900 font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
       @click="$emit('newGroup')"
+      @touch="$emit('newGroup')"
     >
       Search
     </button>
