@@ -1,10 +1,12 @@
 <template>
   <div class="flex flex-col">
     <h4 class="text-center font-bold text-sm">{{ title }}</h4>
-    <p 
+    <p
       class="w-full overflow-clip overflow-hidden mx-auto mt-auto border rounded text-sm align-text-bottom"
       :class="`border-${color}-700 text-center`"
-    >{{ content }}</p>
+    >
+      {{ content }}
+    </p>
   </div>
 </template>
 
@@ -15,8 +17,8 @@ export default {
     content: [String, Boolean],
     color: {
       type: String,
-      default: "green"  
+      default: "green",
     },
-  }
-}
+  },
+};
 </script>

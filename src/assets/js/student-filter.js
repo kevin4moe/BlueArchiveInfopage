@@ -14,15 +14,23 @@ class StudentFilter {
     indoors: [],
   };
   noTags = [
-    "Combat Class", "Rarity", "Academy",
-    "Role", "Position", "ATK", "DEF",
-    "Weapon", "User cover?", "Urban",
-    "Outdoors", "Indoors"
+    "Combat Class",
+    "Rarity",
+    "Academy",
+    "Role",
+    "Position",
+    "ATK",
+    "DEF",
+    "Weapon",
+    "User cover?",
+    "Urban",
+    "Outdoors",
+    "Indoors",
   ];
   tags = [];
 
   addTags(tag, value) {
-    const isTag = this.noTags.findIndex(noTag => noTag === value);
+    const isTag = this.noTags.findIndex((noTag) => noTag === value);
     // Detectar si existe la categoria
     if (isTag < 0) {
       if (this.tags.includes(tag)) {
@@ -32,7 +40,7 @@ class StudentFilter {
         this.filter[tag].push(value);
       }
     } else {
-      const tagIndex = this.tags.findIndex(tg => tg === tag);
+      const tagIndex = this.tags.findIndex((tg) => tg === tag);
       this.tags.splice(tagIndex, 1);
       this.filter[tag].splice(0, 1);
     }
@@ -47,21 +55,23 @@ class StudentFilter {
         getStudents = [];
         getStudentsIndex = [];
         sg.forEach((student) => {
-          console.warn(`${student[tag]} === ${this.filter[tag][0]}`)
+          console.warn(`${student[tag]} === ${this.filter[tag][0]}`);
           if (student[tag] === this.filter[tag][0]) {
-            console.info(`${student[tag]} === ${this.filter[tag][0]}`)
+            console.info(`${student[tag]} === ${this.filter[tag][0]}`);
             getStudents.push(student);
 
-            const gsIndex = students.findIndex(gs => gs.name === student.name)
+            const gsIndex = students.findIndex(
+              (gs) => gs.name === student.name
+            );
             getStudentsIndex.push(gsIndex);
           }
         });
-        console.info(getStudents)
+        console.info(getStudents);
         sg = getStudents;
       });
       return getStudentsIndex;
     } else {
-      console.warn('Tags are empty. Use addTags(tag, value).')
+      console.warn("Tags are empty. Use addTags(tag, value).");
       const arrayAll = [...Array(students.length).keys()];
       return arrayAll;
     }

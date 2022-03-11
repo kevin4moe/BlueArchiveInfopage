@@ -1,10 +1,10 @@
 module.exports = {
-  publicPath: '/',
+  publicPath: "/",
   chainWebpack: (config) => {
-    config.plugin('html').tap((args) => {
+    config.plugin("html").tap((args) => {
       const argumentos = args;
-      argumentos[0].template = './public/index.html';
+      argumentos[0].template = "./public/index.html";
       return argumentos;
     });
-  }
+  },
 };

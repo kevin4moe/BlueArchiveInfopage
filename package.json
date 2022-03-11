@@ -1,6 +1,6 @@
 {
   "name": "infopage_ba",
-  "version": "0.3.2",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -13,17 +13,21 @@
     "core-js": "^3.6.5",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-plugin-babel": "~5.0.1",
+    "@vue/cli-plugin-eslint": "~4.5.15",
+    "@vue/cli-service": "~5.0.1",
     "@vue/compiler-sfc": "^3.0.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.0.0",
-    "vue-cli-plugin-tailwind": "~2.2.17"
+    "prettier": "^2.2.1",
+    "vue-cli-plugin-tailwind": "~2.2.18"
   },
   "eslintConfig": {
     "root": true,
@@ -32,7 +36,8 @@
     },
     "extends": [
       "plugin:vue/vue3-essential",
-      "eslint:recommended"
+      "eslint:recommended",
+      "@vue/prettier"
     ],
     "parserOptions": {
       "parser": "babel-eslint"
