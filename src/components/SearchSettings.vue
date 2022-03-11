@@ -1,8 +1,8 @@
 <template>
   <nav class="flex justify-center flex-wrap mt-2 mx-2 rounded bg-white shadow">
-    <section class="flex flex-row">
+    <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1">
       <!-- ATK, DEF & Role -->
-      <div class="flex flex-col justify-evenly w-40 mx-1">
+      <div class="flex flex-col justify-evenly w-40 h-20 mx-1">
         <div class="flex flex-row justify-center h-7">
           <select
             name="attack_type"
@@ -134,7 +134,7 @@
         </select>
       </div>
       <!-- Combat Class & Use Cover? -->
-      <div class="flex flex-col justify-evenly w-40 mx-1">
+      <div class="flex flex-col justify-evenly w-40 h-20 mx-1">
         <ol class="flex flex-row justify-center h-7 text-white font-semibold">
           <li
             class="w-1/2 rounded-l text-center"
@@ -174,7 +174,7 @@
         </button>
       </div>
       <!-- Weapon Type -->
-      <div class="flex flex-col justify-evenly w-40">
+      <div class="flex flex-col justify-evenly w-40 h-20">
         <select
           name="weapon_type"
           class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-semibold"
@@ -218,7 +218,7 @@
         </select>
       </div>
       <!-- Position -->
-      <div class="flex flex-col justify-evenly w-22">
+      <div class="flex flex-col justify-evenly w-22 h-20">
         <select
           name="position"
           class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-semibold"
@@ -279,7 +279,7 @@
         </select>
       </div>
       <!-- School -->
-      <div class="flex flex-col justify-evenly w-40">
+      <div class="flex flex-col justify-evenly w-40 h-20">
         <select
           name="school"
           class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-semibold"
@@ -380,7 +380,12 @@
         </ol>
       </div>
     </section>
-    <button @click="$emit('newGroup')">Search</button>
+    <button
+      class="w-20 h-10 bg-blue-300 my-1 sm:my-auto lg:my-1 rounded-lg text-blue-900 font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+      @click="$emit('newGroup')"
+    >
+      Search
+    </button>
   </nav>
 </template>
 
