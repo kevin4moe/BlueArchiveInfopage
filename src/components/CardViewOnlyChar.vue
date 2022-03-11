@@ -5,12 +5,20 @@
         colors[student.attackType]
       } ${colors[student.armorType]}`"
     >
-      <div>
+      <div class="relative">
         <img
           class="lazyload w-full h-auto rounded-lg"
           :src="require(`@/assets/students/icons/${student.name}.jpg`)"
           :alt="student.name"
         />
+        <p
+          v-show="this.$store.state.useCover"
+          class="absolute inset-x-0 bottom-0 text-center bg-black opacity-70 text-white font-bold"
+        >
+          <span>
+            {{ student.useCover }}
+          </span>
+        </p>
       </div>
     </main>
   </section>

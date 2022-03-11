@@ -41,7 +41,7 @@ export default createStore({
       value: false,
     },
     role: {
-      types: ["Attacker", "Supporter", "Tank", "Healer"],
+      types: ["Attacker", "Support", "Tank", "Healer"],
       value: false,
     },
     attackType: {

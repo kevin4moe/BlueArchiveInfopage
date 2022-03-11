@@ -27,11 +27,15 @@ class StudentFilter {
     current: [],
   };
   sortBy = {
-    types: ["rarity"],
+    types: ["rarity", "combatClass"],
     rarity: {
       1: [],
       2: [],
       3: [],
+    },
+    combatClass: {
+      striker: [],
+      special: [],
     },
     active: false,
   };
@@ -63,6 +67,10 @@ class StudentFilter {
       });
     }
 
+    if (state.combatClass.striker || state.combatClass.special) {
+      this.searchTeam(students, state);
+    }
+
     if (state.rarity > -1) {
       this.searchRarity(students, state);
     } else {
@@ -92,6 +100,31 @@ class StudentFilter {
         ...this.sortBy.rarity[1],
       ];
     }
+  }
+
+  searchTeam(students, state) {
+    this.sortBy.combatClass.striker = [];
+    this.sortBy.combatClass.special = [];
+    let studentsIndex = [];
+    this.studentsIndex.current.forEach((index) => {
+      if (
+        students[index].combatClass === "Striker" &&
+        state.combatClass.striker
+      ) {
+        this.sortBy.combatClass.striker.push(index);
+      } else if (
+        students[index].combatClass === "Special" &&
+        state.combatClass.special
+      ) {
+        this.sortBy.combatClass.special.push(index);
+      }
+      studentsIndex = [
+        ...this.sortBy.combatClass.striker,
+        ...this.sortBy.combatClass.special,
+      ];
+      this.studentsIndex.current = studentsIndex;
+      //this.sortBy.active = true;
+    });
   }
 }
 
