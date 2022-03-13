@@ -5,18 +5,13 @@
       <div class="flex flex-col justify-evenly w-40 h-20 mx-1">
         <div class="flex flex-row justify-center h-7">
           <select
-            name="attack_type"
+            name="attackType"
             class="w-1/2 rounded-l bg-gray-800 text-center text-white font-semibold"
             :class="store.state.attackType.colors[store.state.attackType.value]"
+            @change="commitStore('attackType', $event.target.selectedIndex)"
           >
             <option
-              value="attack_type"
-              @click="
-                store.commit('changeValueTypes', {
-                  name: 'attackType',
-                  newValue: false,
-                })
-              "
+              value="attackType"
             >
               ATK
             </option>
@@ -24,30 +19,19 @@
               v-for="(type, index) in store.state.attackType.types"
               :class="store.state.attackType.colors[index]"
               :value="type"
-              @click="
-                store.commit('changeValueTypes', {
-                  name: 'attackType',
-                  newValue: index,
-                })
-              "
               :key="type"
             >
               {{ type.toUpperCase() }}
             </option>
           </select>
           <select
-            name="armor_type"
+            name="armorType"
             class="w-1/2 rounded-r bg-gray-800 text-center text-white font-semibold"
             :class="store.state.armorType.colors[store.state.armorType.value]"
+            @change="commitStore('armorType', $event.target.selectedIndex)"
           >
             <option
-              value="armor_type"
-              @click="
-                store.commit('changeValueTypes', {
-                  name: 'armorType',
-                  newValue: false,
-                })
-              "
+              value="armorType"
             >
               DEF
             </option>
@@ -55,12 +39,6 @@
               v-for="(type, index) in store.state.armorType.types"
               :class="store.state.armorType.colors[index]"
               :value="type"
-              @click="
-                store.commit('changeValueTypes', {
-                  name: 'armorType',
-                  newValue: index,
-                })
-              "
               :key="type"
             >
               {{ type.toUpperCase() }}
@@ -70,27 +48,16 @@
         <select
           name="role"
           class="h-7 rounded bg-gray-800 text-center text-white font-semibold"
+          @change="commitStore('role', $event.target.selectedIndex)"
         >
           <option
             value="role"
-            @click="
-              store.commit('changeValueTypes', {
-                name: 'role',
-                newValue: false,
-              })
-            "
           >
             ROLE
           </option>
           <option
-            v-for="(type, index) in store.state.role.types"
+            v-for="(type) in store.state.role.types"
             :value="type"
-            @click="
-              store.commit('changeValueTypes', {
-                name: 'role',
-                newValue: index,
-              })
-            "
             :key="type"
           >
             {{ type.toUpperCase() }}
@@ -148,30 +115,19 @@
       <!-- Weapon Type -->
       <div class="flex flex-col justify-evenly w-40 h-20">
         <select
-          name="weapon_type"
+          name="weaponsTypes"
           class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-semibold"
+          @change="commitStore('weaponsTypes', $event.target.selectedIndex)"
         >
           <option
-            value="Any"
-            @click="
-              store.commit('changeValueTypes', {
-                name: 'weaponsTypes',
-                newValue: false,
-              })
-            "
+            value="weaponsTypes"
           >
             WEAPONS
           </option>
           <option
-            v-for="(weapon, index) in store.state.weaponsTypes.types"
+            v-for="(weapon) in store.state.weaponsTypes.types"
             :value="weapon"
             :key="weapon"
-            @click="
-              store.commit('changeValueTypes', {
-                name: 'weaponsTypes',
-                newValue: index,
-              })
-            "
           >
             {{ weapon }}
           </option>
@@ -182,39 +138,16 @@
         <select
           name="position"
           class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-semibold"
+          @change="commitStore('position', $event.target.selectedIndex)"
         >
           <option
             value="position"
-            @click="
-              store.commit('changeValueTypes', {
-                name: 'position',
-                newValue: false,
-              })
-            "
           >
             POSITION
           </option>
           <option
-            class="hidden"
-            value="position"
-            @click="
-              store.commit('changeValueTypes', {
-                name: 'position',
-                newValue: -1,
-              })
-            "
-          >
-            ALL
-          </option>
-          <option
-            v-for="(name, index) in store.state.position.types"
+            v-for="(name) in store.state.position.types"
             :value="name"
-            @click="
-              store.commit('changeValueTypes', {
-                name: 'position',
-                newValue: index,
-              })
-            "
             :key="name"
           >
             {{ name.toUpperCase() }}
@@ -226,27 +159,16 @@
         <select
           name="school"
           class="h-full m-1 rounded bg-gray-200 text-center text-2xl font-semibold"
+          @change="commitStore('school', $event.target.selectedIndex)"
         >
           <option
             value="school"
-            @click="
-              store.commit('changeValueTypes', {
-                name: 'school',
-                newValue: false,
-              })
-            "
           >
             SCHOOL
           </option>
           <option
-            v-for="(type, index) in store.state.school.types"
+            v-for="(type) in store.state.school.types"
             :value="type"
-            @click="
-              store.commit('changeValueTypes', {
-                name: 'school',
-                newValue: index,
-              })
-            "
             :key="type"
           >
             {{ type.toUpperCase() }}
@@ -323,16 +245,24 @@ export default {
   setup() {
     const store = useStore();
 
+    const commitStore = (eventName, value) => {
+      if (eventName === value) {
+        store.commit('changeValueTypes', {
+          name: eventName,
+          newValue: false,
+        });
+      } else {
+        store.commit('changeValueTypes', {
+          name: eventName,
+          newValue: value - 1,
+        });
+      }
+    }
+    
     return {
       store,
+      commitStore
     };
-  },
-  computed: {
-    colorIfActive() {
-      return {
-        "bg-white": true,
-      };
-    },
   },
 };
 </script>
